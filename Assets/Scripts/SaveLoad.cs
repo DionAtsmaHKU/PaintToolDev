@@ -1,17 +1,21 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SaveData
 {
     public Color[] pixelColors;
 }
 
-
 public class SaveLoad : MonoBehaviour
 {
-    private string path;
+    [SerializeField] UIController uiController;
+    [SerializeField] DrawingRenderer drawingRenderer;
+    private static string path = "/SaveData/";
+    private static string fileName = "SaveData.txt";
 
+    // Singleton creation
     public static SaveLoad Instance { get; private set; }
 
     private void Awake()
@@ -26,24 +30,62 @@ public class SaveLoad : MonoBehaviour
         {
             Instance = this;
         }
+
+        uiController.OnSaveButtonClicked += Save;
+        uiController.OnLoadButtonClicked += Load;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        path = Application.persistentDataPath + "/testImage.png";
+        // path = Application.persistentDataPath + "/testImage.png";
         Debug.Log(path);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            StartCoroutine(RecordFrame());
-        }
+
     }
 
+    public void Save()
+    {
+        string directory = Application.persistentDataPath + path;
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        string json = JsonUtility.ToJson(drawingRenderer.data);
+        File.WriteAllText(directory + fileName, json);
+        Debug.Log("Woo yeah we savin");
+        // drawingRenderer.data;
+    }
+
+    public void Load()
+    {
+        string loadPath = Application.persistentDataPath + path + fileName;
+
+        if (File.Exists(loadPath))
+        {
+            string json = File.ReadAllText(loadPath);
+            drawingRenderer.data = JsonUtility.FromJson<SaveData>(json);
+            drawingRenderer.UpdateRenderTexture();
+        }
+        else { Debug.Log("woops there's nothing there man"); }
+
+
+        Debug.Log("Wuh-oh we're loadin");
+        // drawingRenderer.data;
+    }
+
+    private void SetPixels()
+    {
+
+    }
+
+    /*
+     * 
     IEnumerator RecordFrame()
     {
         yield return new WaitForEndOfFrame();
@@ -75,4 +117,5 @@ public class SaveLoad : MonoBehaviour
         }
         return texture;
     }
+    */
 }

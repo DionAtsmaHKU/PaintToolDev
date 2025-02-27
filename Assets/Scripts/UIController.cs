@@ -38,60 +38,60 @@ public class UIController : MonoBehaviour
         canvas.style.height = Screen.height;
     }
 
-    private void OnClearButtonClickedEvent(ClickEvent evt)
+    private void OnClearButtonClickedEvent(ClickEvent _evt)
     {
         OnClearButtonClicked?.Invoke();
     }
 
-    private void OnLoadButtonClickedEvent(ClickEvent evt)
-    {
-        OnSaveButtonClicked?.Invoke();
-    }
-
-    private void OnSaveButtonClickedEvent(ClickEvent evt)
+    private void OnLoadButtonClickedEvent(ClickEvent _evt)
     {
         OnLoadButtonClicked?.Invoke();
     }
 
-    private void OnPointerOutEvent(PointerOutEvent evt)
+    private void OnSaveButtonClickedEvent(ClickEvent _evt)
+    {
+        OnSaveButtonClicked?.Invoke();
+    }
+
+    private void OnPointerOutEvent(PointerOutEvent _evt)
     {
         OnPointerOut?.Invoke();
     }
 
-    private void OnPointerReleasedEvent(PointerUpEvent evt)
+    private void OnPointerReleasedEvent(PointerUpEvent _evt)
     {
-        Vector2 normalizedPosition = ProcessPosition(evt.localPosition);
+        Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
         Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerReleased?.Invoke();
     }
 
-    private void OnPointerMovedEvent(PointerMoveEvent evt)
+    private void OnPointerMovedEvent(PointerMoveEvent _evt)
     {
-        Vector2 normalizedPosition = ProcessPosition(evt.localPosition);
+        Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
         Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerMoved?.Invoke(normalizedPosition);
     }
 
-    private void OnPointerDownEvent(PointerDownEvent evt)
+    private void OnPointerDownEvent(PointerDownEvent _evt)
     {
-        Vector2 normalizedPosition = ProcessPosition(evt.localPosition);
+        Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
         Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerDown?.Invoke(normalizedPosition);
     }
 
     //Flips Y axis to be pointing UP
-    private Vector2 ProcessPosition(Vector2 localMousePosition)
+    private Vector2 ProcessPosition(Vector2 _localMousePosition)
     {
-        Vector2 normalizedPosition = NormalizePixelPosition(localMousePosition);
+        Vector2 normalizedPosition = NormalizePixelPosition(_localMousePosition);
         normalizedPosition.y = 1 - normalizedPosition.y;
         return normalizedPosition;
     }
 
     // Normalizes pixel position to the 0-1 range based on Ui element width and height
-    private Vector2 NormalizePixelPosition(Vector2 pixelPosition)
+    private Vector2 NormalizePixelPosition(Vector2 _pixelPosition)
     {
-        float normalizedX = Mathf.InverseLerp(0, canvas.layout.width, pixelPosition.x);
-        float normalizedY = Mathf.InverseLerp(0, canvas.layout.height, pixelPosition.y);
+        float normalizedX = Mathf.InverseLerp(0, canvas.layout.width, _pixelPosition.x);
+        float normalizedY = Mathf.InverseLerp(0, canvas.layout.height, _pixelPosition.y);
         return new(normalizedX, normalizedY);
     }
 }

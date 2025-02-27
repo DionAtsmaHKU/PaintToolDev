@@ -6,7 +6,7 @@ public class DrawingRenderer : MonoBehaviour
 {
     [SerializeField] RenderTexture renderTexture;
     private Texture2D drawingTexture;
-    private SaveData data = new SaveData();
+    public SaveData data = new SaveData();
 
     private void Start()
     {   
@@ -41,7 +41,7 @@ public class DrawingRenderer : MonoBehaviour
         UpdateRenderTexture();
     }
 
-    private void UpdateRenderTexture()
+    public void UpdateRenderTexture()
     { 
         RenderTexture currentActiveRT = RenderTexture.active;
         RenderTexture.active = renderTexture;
