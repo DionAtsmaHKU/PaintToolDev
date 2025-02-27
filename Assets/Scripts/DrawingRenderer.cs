@@ -5,15 +5,15 @@ using UnityEngine;
 public class DrawingRenderer : MonoBehaviour
 {
     [SerializeField] RenderTexture renderTexture;
-    private Texture2D drawingTexture; 
-    private Color[] pixelColors;
+    private Texture2D drawingTexture;
+    private SaveData data = new SaveData();
 
     private void Start()
     {   
         //Prepare the drawing texture
         drawingTexture = new(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
         drawingTexture.filterMode = FilterMode.Point;
-        pixelColors = new Color[renderTexture.width * renderTexture.height];
+        data.pixelColors = new Color[renderTexture.width * renderTexture.height];
         ClearCanvas();
     }
 
@@ -26,17 +26,17 @@ public class DrawingRenderer : MonoBehaviour
         // Calculate 1D array index (row-major order)
         int pixelIndex = pixelPositionOnTexture.y * renderTexture.width + pixelPositionOnTexture.x;
 
-        if (pixelColors[pixelIndex] == color)
+        if (data.pixelColors[pixelIndex] == color)
             return;
-        pixelColors[pixelIndex] = color;
+        data.pixelColors[pixelIndex] = color;
         UpdateRenderTexture();
     }
 
     public void ClearCanvas()
     {
-        for (int i = 0; i < pixelColors.Length; i++)
+        for (int i = 0; i < data.pixelColors.Length; i++)
         {
-            pixelColors[i] = Color.black;
+            data.pixelColors[i] = Color.black;
         }
         UpdateRenderTexture();
     }
@@ -46,7 +46,7 @@ public class DrawingRenderer : MonoBehaviour
         RenderTexture currentActiveRT = RenderTexture.active;
         RenderTexture.active = renderTexture;
 
-        drawingTexture.SetPixels(pixelColors);
+        drawingTexture.SetPixels(data.pixelColors);
         drawingTexture.Apply();
 
         Graphics.Blit(drawingTexture, renderTexture);

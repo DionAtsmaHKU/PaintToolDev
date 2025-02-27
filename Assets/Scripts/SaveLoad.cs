@@ -2,6 +2,12 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
+public class SaveData
+{
+    public Color[] pixelColors;
+}
+
+
 public class SaveLoad : MonoBehaviour
 {
     private string path;
