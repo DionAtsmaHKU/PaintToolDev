@@ -13,7 +13,7 @@ public class SaveLoad : MonoBehaviour
     [SerializeField] UIController uiController;
     [SerializeField] DrawingRenderer drawingRenderer;
     private static string path = "/SaveData/";
-    private static string fileName = "SaveData.txt";
+    private static string fileName = "SaveData.json";
 
     // Singleton creation
     public static SaveLoad Instance { get; private set; }
