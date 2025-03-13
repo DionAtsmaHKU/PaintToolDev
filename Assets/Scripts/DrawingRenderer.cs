@@ -41,7 +41,7 @@ public class DrawingRenderer : MonoBehaviour
     public void FillOnTexture(Vector2 _normalizedPixelPosition, Color _color)
     {
         int pixelIndex = ConvertPosToPixel(_normalizedPixelPosition);
-        int[] directions = new int[] { pixelIndex + 1, pixelIndex - 1, pixelIndex + gridLengthWidth, pixelIndex - gridLengthWidth };
+        int[] directions = new int[] { 1, -1, -gridLengthWidth, gridLengthWidth };
 
         Color oldColor = data.pixelColors[pixelIndex];
 
@@ -55,6 +55,7 @@ public class DrawingRenderer : MonoBehaviour
             return;
 
         data.pixelColors[_pixelIndex] = _newColor;
+        Debug.Log("filled pixel: " + _pixelIndex);
         for (int i = 0; i < directions.Length; i++)
         {
             DfsFloodFill(_pixelIndex + directions[i], _newColor, _oldColor, directions);
@@ -63,6 +64,10 @@ public class DrawingRenderer : MonoBehaviour
 
     private bool CheckFill(int _pixelIndex, Color _newColor, Color _oldColor)
     {
+        if (_pixelIndex < 0 || _pixelIndex > 255)
+        {
+            return true;
+        }
         if (data.pixelColors[_pixelIndex] == _newColor || data.pixelColors[_pixelIndex] != _oldColor)
         {
             return true;
