@@ -442,6 +442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiController: {fileID: 184636422}
   drawingRenderer: {fileID: 1460601503}
+  drawMode: 1
 --- !u!4 &2021120623
 Transform:
   m_ObjectHideFlags: 0

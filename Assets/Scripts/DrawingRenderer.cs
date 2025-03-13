@@ -7,9 +7,10 @@ public class DrawingRenderer : MonoBehaviour
     [SerializeField] RenderTexture renderTexture;
     private Texture2D drawingTexture;
     public SaveData data = new SaveData();
+    private int gridLengthWidth = 16;
 
     private void Start()
-    {   
+    {
         //Prepare the drawing texture
         drawingTexture = new(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
         drawingTexture.filterMode = FilterMode.Point;
@@ -17,19 +18,56 @@ public class DrawingRenderer : MonoBehaviour
         ClearCanvas();
     }
 
-    public void DrawOnTexture(Vector2 normalizedPixelPosition, Color color)
+    public void DrawOnTexture(Vector2 _normalizedPixelPosition, Color _color)
     {
-        //convert normalized position to RenderTexture position
-        Vector2Int pixelPositionOnTexture = new((int)(normalizedPixelPosition.x * (renderTexture.width)),
-            (int)(normalizedPixelPosition.y * (renderTexture.height)));
+        int pixelIndex = ConvertPosToPixel(_normalizedPixelPosition);
 
-        // Calculate 1D array index (row-major order)
-        int pixelIndex = pixelPositionOnTexture.y * renderTexture.width + pixelPositionOnTexture.x;
-
-        if (data.pixelColors[pixelIndex] == color)
+        if (data.pixelColors[pixelIndex] == _color)
             return;
-        data.pixelColors[pixelIndex] = color;
+        data.pixelColors[pixelIndex] = _color;
         UpdateRenderTexture();
+    }
+
+    public void EraseOnTexture(Vector2 _normalizedPixelPosition)
+    {
+        int pixelIndex = ConvertPosToPixel(_normalizedPixelPosition);
+
+        if (data.pixelColors[pixelIndex] == Color.clear)
+            return;
+        data.pixelColors[pixelIndex] = Color.clear;
+        UpdateRenderTexture();
+    }
+
+    public void FillOnTexture(Vector2 _normalizedPixelPosition, Color _color)
+    {
+        int pixelIndex = ConvertPosToPixel(_normalizedPixelPosition);
+        int[] directions = new int[] { pixelIndex + 1, pixelIndex - 1, pixelIndex + gridLengthWidth, pixelIndex - gridLengthWidth };
+
+        Color oldColor = data.pixelColors[pixelIndex];
+
+        DfsFloodFill(pixelIndex, _color, oldColor, directions);
+        UpdateRenderTexture();
+    }
+
+    private void DfsFloodFill(int _pixelIndex, Color _newColor, Color _oldColor, int[] directions)
+    {
+        if (CheckFill(_pixelIndex, _newColor, _oldColor))
+            return;
+
+        data.pixelColors[_pixelIndex] = _newColor;
+        for (int i = 0; i < directions.Length; i++)
+        {
+            DfsFloodFill(_pixelIndex + directions[i], _newColor, _oldColor, directions);
+        }
+    }
+
+    private bool CheckFill(int _pixelIndex, Color _newColor, Color _oldColor)
+    {
+        if (data.pixelColors[_pixelIndex] == _newColor || data.pixelColors[_pixelIndex] != _oldColor)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void ClearCanvas()
@@ -51,5 +89,14 @@ public class DrawingRenderer : MonoBehaviour
 
         Graphics.Blit(drawingTexture, renderTexture);
         RenderTexture.active = currentActiveRT;
+    }
+
+    // Convert normalized position to RenderTexture position
+    private int ConvertPosToPixel(Vector2 _normalizedPixelPosition)
+    {
+        Vector2Int pixelPositionOnTexture = new((int)(_normalizedPixelPosition.x * (renderTexture.width)),
+            (int)(_normalizedPixelPosition.y * (renderTexture.height)));
+        int pixelIndex = pixelPositionOnTexture.y * renderTexture.width + pixelPositionOnTexture.x;
+        return pixelIndex;
     }
 }
