@@ -5,7 +5,7 @@ using UnityEngine;
 public class DrawingRenderer : MonoBehaviour
 {
     [SerializeField] RenderTexture renderTexture;
-    private Texture2D drawingTexture;
+    public Texture2D drawingTexture;
     public SaveData data = new SaveData();
     private int gridLengthWidth = 16;
 
@@ -79,7 +79,7 @@ public class DrawingRenderer : MonoBehaviour
     {
         for (int i = 0; i < data.pixelColors.Length; i++)
         {
-            data.pixelColors[i] = Color.black;
+            data.pixelColors[i] = Color.clear;
         }
         UpdateRenderTexture();
     }

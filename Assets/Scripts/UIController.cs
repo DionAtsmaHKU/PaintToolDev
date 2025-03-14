@@ -8,10 +8,10 @@ using UnityEngine.UIElements;
 public class UIController : MonoBehaviour
 {
     private UIDocument uiDocument;
-    private VisualElement canvas, clearButton, saveButton, loadButton, paintButton, eraseButton, fillButton;
+    private VisualElement canvas, clearButton, saveButton, loadButton, exportButton, paintButton, eraseButton, fillButton;
 
     public event Action<Vector2> OnPointerDown, OnPointerMoved;
-    public event Action OnClearButtonClicked, OnSaveButtonClicked, OnLoadButtonClicked, OnPaintButtonClicked, OnEraseButtonClicked, OnFillButtonClicked, OnPointerReleased, OnPointerOut;
+    public event Action OnClearButtonClicked, OnSaveButtonClicked, OnLoadButtonClicked, OnExportButtonClicked, OnPaintButtonClicked, OnEraseButtonClicked, OnFillButtonClicked, OnPointerReleased, OnPointerOut;
 
     private void Awake()
     {
@@ -20,6 +20,7 @@ public class UIController : MonoBehaviour
         clearButton = uiDocument.rootVisualElement.Q<VisualElement>("Clear");
         saveButton = uiDocument.rootVisualElement.Q<VisualElement>("Save");
         loadButton = uiDocument.rootVisualElement.Q<VisualElement>("Load");
+        exportButton = uiDocument.rootVisualElement.Q<VisualElement>("Export");
         paintButton = uiDocument.rootVisualElement.Q<VisualElement>("Paint");
         eraseButton = uiDocument.rootVisualElement.Q<VisualElement>("Erase");
         fillButton = uiDocument.rootVisualElement.Q<VisualElement>("Fill");
@@ -31,6 +32,7 @@ public class UIController : MonoBehaviour
         clearButton.RegisterCallback<ClickEvent>(OnClearButtonClickedEvent);
         saveButton.RegisterCallback<ClickEvent>(OnSaveButtonClickedEvent);
         loadButton.RegisterCallback<ClickEvent>(OnLoadButtonClickedEvent);
+        exportButton.RegisterCallback<ClickEvent>(OnExportButtonClickedEvent);
         paintButton.RegisterCallback<ClickEvent>(OnPaintButtonClickedEvent);
         eraseButton.RegisterCallback<ClickEvent>(OnEraseButtonClickedEvent);
         fillButton.RegisterCallback<ClickEvent>(OnFillButtonClickedEvent);
@@ -57,6 +59,11 @@ public class UIController : MonoBehaviour
     private void OnSaveButtonClickedEvent(ClickEvent _evt)
     {
         OnSaveButtonClicked?.Invoke();
+    }
+
+    private void OnExportButtonClickedEvent(ClickEvent _evt)
+    {
+        OnExportButtonClicked?.Invoke();
     }
 
     private void OnPaintButtonClickedEvent(ClickEvent _evt)

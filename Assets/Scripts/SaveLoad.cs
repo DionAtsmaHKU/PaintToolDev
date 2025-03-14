@@ -14,6 +14,7 @@ public class SaveLoad : MonoBehaviour
     [SerializeField] DrawingRenderer drawingRenderer;
     private static string path = "/SaveData/";
     private static string fileName = "SaveData.json";
+    private static string exportName = "PaintImg.png";
 
     // Singleton creation
     public static SaveLoad Instance { get; private set; }
@@ -31,6 +32,7 @@ public class SaveLoad : MonoBehaviour
 
         uiController.OnSaveButtonClicked += Save;
         uiController.OnLoadButtonClicked += Load;
+        uiController.OnExportButtonClicked += ExportToPng;
     }
 
     public void Save()
@@ -59,5 +61,18 @@ public class SaveLoad : MonoBehaviour
         else { Debug.Log("woops there's nothing there man"); }
 
         Debug.Log("Wuh-oh we're loadin");
+    }
+
+    public void ExportToPng()
+    {
+        string directory = Application.persistentDataPath + path;
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        byte[] bytes = drawingRenderer.drawingTexture.EncodeToPNG();
+        File.WriteAllBytes(directory + exportName, bytes);
+        Debug.Log("ex-ex-ex-exporting");
     }
 }
