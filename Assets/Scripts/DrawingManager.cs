@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum DrawMode
 {
@@ -15,6 +17,7 @@ public class DrawingManager : MonoBehaviour
     [SerializeField] UIController uiController;
     [SerializeField] DrawingRenderer drawingRenderer;
     public DrawMode drawMode = DrawMode.Brush;
+    private Color currentColor = Color.black;
 
     //Connect events
     private void Start()
@@ -26,6 +29,7 @@ public class DrawingManager : MonoBehaviour
         uiController.OnPaintButtonClicked += EnterPaintMode;
         uiController.OnEraseButtonClicked += EnterEraseMode;
         uiController.OnFillButtonClicked += EnterFillMode;
+        uiController.OnColorSelected += SelectColor;
     }
 
     private void ClearDrawing()
@@ -48,7 +52,7 @@ public class DrawingManager : MonoBehaviour
                 break;
 
             case DrawMode.Brush:
-                drawingRenderer.DrawOnTexture(_normalizedPixelPosition, Color.yellow);
+                drawingRenderer.DrawOnTexture(_normalizedPixelPosition, currentColor);
                 break;
 
             case DrawMode.Erase:
@@ -56,7 +60,7 @@ public class DrawingManager : MonoBehaviour
                 break;
 
             case DrawMode.Fill:
-                drawingRenderer.FillOnTexture(_normalizedPixelPosition, Color.green);
+                drawingRenderer.FillOnTexture(_normalizedPixelPosition, currentColor);
                 break;
         }
     }
@@ -74,6 +78,11 @@ public class DrawingManager : MonoBehaviour
     private void EnterFillMode()
     {
         drawMode = DrawMode.Fill;
+    }
+
+    private void SelectColor(VisualElement _button)
+    {
+        currentColor = _button.resolvedStyle.backgroundColor;
     }
 
     private void StartDrawing(Vector2 _normalizedPixelPosition)

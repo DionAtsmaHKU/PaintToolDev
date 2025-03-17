@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,9 +10,11 @@ public class UIController : MonoBehaviour
 {
     private UIDocument uiDocument;
     private VisualElement canvas, clearButton, saveButton, loadButton, exportButton, paintButton, eraseButton, fillButton;
+    private VisualElement color1, color2, color3, color4, color5, color6, color7, color8, color9;
 
     public event Action<Vector2> OnPointerDown, OnPointerMoved;
     public event Action OnClearButtonClicked, OnSaveButtonClicked, OnLoadButtonClicked, OnExportButtonClicked, OnPaintButtonClicked, OnEraseButtonClicked, OnFillButtonClicked, OnPointerReleased, OnPointerOut;
+    public event Action<VisualElement> OnColorSelected;
 
     private void Awake()
     {
@@ -24,6 +27,15 @@ public class UIController : MonoBehaviour
         paintButton = uiDocument.rootVisualElement.Q<VisualElement>("Paint");
         eraseButton = uiDocument.rootVisualElement.Q<VisualElement>("Erase");
         fillButton = uiDocument.rootVisualElement.Q<VisualElement>("Fill");
+        color1 = uiDocument.rootVisualElement.Q<VisualElement>("Color1");
+        color2 = uiDocument.rootVisualElement.Q<VisualElement>("Color2");
+        color3 = uiDocument.rootVisualElement.Q<VisualElement>("Color3");
+        color4 = uiDocument.rootVisualElement.Q<VisualElement>("Color4");
+        color5 = uiDocument.rootVisualElement.Q<VisualElement>("Color5");
+        color6 = uiDocument.rootVisualElement.Q<VisualElement>("Color6");
+        color7 = uiDocument.rootVisualElement.Q<VisualElement>("Color7");
+        color8 = uiDocument.rootVisualElement.Q<VisualElement>("Color8");
+        color9 = uiDocument.rootVisualElement.Q<VisualElement>("Color9");
 
         canvas.RegisterCallback<PointerDownEvent>(OnPointerDownEvent);
         canvas.RegisterCallback<PointerMoveEvent>(OnPointerMovedEvent);
@@ -36,9 +48,21 @@ public class UIController : MonoBehaviour
         paintButton.RegisterCallback<ClickEvent>(OnPaintButtonClickedEvent);
         eraseButton.RegisterCallback<ClickEvent>(OnEraseButtonClickedEvent);
         fillButton.RegisterCallback<ClickEvent>(OnFillButtonClickedEvent);
+        color1.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color1);
+        color2.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color2);
+        color3.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color3);
+        color4.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color4);
+        color5.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color5);
+        color6.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color6);
+        color7.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color7);
+        color8.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color8);
+        color9.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color9);
     }
 
-
+    private void OnColorSelectedEvent(ClickEvent _evt, VisualElement _button)
+    {
+        OnColorSelected.Invoke(_button);
+    }
 
     private void Start()
     {
@@ -87,21 +111,21 @@ public class UIController : MonoBehaviour
     private void OnPointerReleasedEvent(PointerUpEvent _evt)
     {
         Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
-        Debug.Log($"Pointer position {normalizedPosition}");
+        // Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerReleased?.Invoke();
     }
 
     private void OnPointerMovedEvent(PointerMoveEvent _evt)
     {
         Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
-        Debug.Log($"Pointer position {normalizedPosition}");
+        // Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerMoved?.Invoke(normalizedPosition);
     }
 
     private void OnPointerDownEvent(PointerDownEvent _evt)
     {
         Vector2 normalizedPosition = ProcessPosition(_evt.localPosition);
-        Debug.Log($"Pointer position {normalizedPosition}");
+        // Debug.Log($"Pointer position {normalizedPosition}");
         OnPointerDown?.Invoke(normalizedPosition);
     }
 

@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderTexture: {fileID: 8400000, guid: 40d2842e61367a44ab58a4e32c67998b, type: 2}
+  drawingTexture: {fileID: 0}
 --- !u!4 &1460601504
 Transform:
   m_ObjectHideFlags: 0
