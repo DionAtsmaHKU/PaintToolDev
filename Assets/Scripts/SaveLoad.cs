@@ -1,7 +1,5 @@
-using System.Collections;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class SaveData
 {
@@ -16,20 +14,8 @@ public class SaveLoad : MonoBehaviour
     private static string fileName = "SaveData.json";
     private static string exportName = "PaintImg.png";
 
-    // Singleton creation
-    public static SaveLoad Instance { get; private set; }
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-
         uiController.OnSaveButtonClicked += Save;
         uiController.OnLoadButtonClicked += Load;
         uiController.OnExportButtonClicked += ExportToPng;
