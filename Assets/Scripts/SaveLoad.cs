@@ -36,7 +36,7 @@ public class SaveLoad : MonoBehaviour
 
     public void Load()
     {
-        string loadPath = Application.persistentDataPath + path + fileName;
+        string loadPath = Application.persistentDataPath + path + fileName; // Path.combine
 
         if (File.Exists(loadPath))
         {

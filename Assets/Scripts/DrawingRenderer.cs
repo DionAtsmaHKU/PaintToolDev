@@ -58,6 +58,9 @@ public class DrawingRenderer : MonoBehaviour
         Debug.Log("filled pixel: " + _pixelIndex);
         for (int i = 0; i < directions.Length; i++)
         {
+            if (CheckFillWrap(_pixelIndex, directions[i]))
+                continue;
+
             DfsFloodFill(_pixelIndex + directions[i], _newColor, _oldColor, directions);
         }
     }
@@ -69,6 +72,19 @@ public class DrawingRenderer : MonoBehaviour
             return true;
         }
         if (data.pixelColors[_pixelIndex] == _newColor || data.pixelColors[_pixelIndex] != _oldColor)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool CheckFillWrap(int _pixelIndex, int _dirIndex)
+    {
+        if (_pixelIndex % 16 == 0 && _dirIndex == -1)
+        {
+            return true;
+        }
+        if ((_pixelIndex + 1) % 16 == 0 && _dirIndex == 1) 
         {
             return true;
         }

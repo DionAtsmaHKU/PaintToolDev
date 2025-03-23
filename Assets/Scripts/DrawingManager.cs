@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,6 +18,8 @@ public class DrawingManager : MonoBehaviour
     [SerializeField] DrawingRenderer drawingRenderer;
     public DrawMode drawMode = DrawMode.Brush;
     private Color currentColor = Color.black;
+    public PaletteList paletteList;
+    private ColorPalette currentPalette;
 
     //Connect events
     private void Start()
@@ -29,6 +32,7 @@ public class DrawingManager : MonoBehaviour
         uiController.OnEraseButtonClicked += EnterEraseMode;
         uiController.OnFillButtonClicked += EnterFillMode;
         uiController.OnColorSelected += SelectColor;
+        uiController.OnNextPaletteClicked += SwapPalette;
     }
 
     private void ClearDrawing()
@@ -89,4 +93,32 @@ public class DrawingManager : MonoBehaviour
         Draw(_normalizedPixelPosition);
         uiController.OnPointerMoved += Draw;
     }
+
+    private void SwapPalette(VisualElement[] _buttons)
+    {
+        currentPalette = paletteList.palettes[1];
+        UpdateColors(_buttons);
+    }
+
+    private void UpdateColors(VisualElement[] _buttons)
+    {
+        for (int i = 0; i < _buttons.Length; i++)
+        {
+            Debug.Log("Setting button " + _buttons[i] + " to colour: " + currentPalette.colors[i]);
+            _buttons[i].style.backgroundColor = currentPalette.colors[i];
+        }
+    }
+}
+
+[Serializable]
+public class PaletteList
+{
+    public ColorPalette[] palettes;
+}
+
+
+[Serializable]
+public class ColorPalette
+{
+    public Color[] colors;
 }

@@ -18,4 +18,5 @@
     <engine:Button name="Color7" style="position: absolute; top: 955px; left: 1575px; height: 64px; width: 64px; background-color: rgb(73, 122, 255);" />
     <engine:Button name="Color8" style="position: absolute; top: 955px; left: 1650px; height: 64px; width: 64px; background-color: rgb(185, 73, 255);" />
     <engine:Button name="Color9" style="position: absolute; top: 955px; left: 1725px; height: 64px; width: 64px; background-color: rgb(0, 0, 0);" />
+    <engine:Button text="Next" name="NextPalette" style="position: absolute; top: 781px; left: 1805px; height: 60px; width: 92px; font-size: 20px;" />
 </engine:UXML>

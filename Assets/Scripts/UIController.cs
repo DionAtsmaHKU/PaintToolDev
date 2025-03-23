@@ -9,11 +9,13 @@ public class UIController : MonoBehaviour
 {
     private UIDocument uiDocument;
     private VisualElement canvas, clearButton, saveButton, loadButton, exportButton, paintButton, eraseButton, fillButton;
-    private VisualElement color1, color2, color3, color4, color5, color6, color7, color8, color9;
+    private VisualElement color1, color2, color3, color4, color5, color6, color7, color8, color9, nextPalette;
+    private VisualElement[] colorButtons;
 
     public event Action<Vector2> OnPointerDown, OnPointerMoved;
     public event Action OnClearButtonClicked, OnSaveButtonClicked, OnLoadButtonClicked, OnExportButtonClicked, OnPaintButtonClicked, OnEraseButtonClicked, OnFillButtonClicked, OnPointerReleased, OnPointerOut;
     public event Action<VisualElement> OnColorSelected;
+    public event Action<VisualElement[]> OnNextPaletteClicked;
 
     private void Awake()
     {
@@ -35,6 +37,8 @@ public class UIController : MonoBehaviour
         color7 = uiDocument.rootVisualElement.Q<VisualElement>("Color7");
         color8 = uiDocument.rootVisualElement.Q<VisualElement>("Color8");
         color9 = uiDocument.rootVisualElement.Q<VisualElement>("Color9");
+        colorButtons = new VisualElement[] { color1, color2, color3, color4, color5, color6, color7, color8, color9 };
+        nextPalette = uiDocument.rootVisualElement.Q<VisualElement>("NextPalette");
 
         canvas.RegisterCallback<PointerDownEvent>(OnPointerDownEvent);
         canvas.RegisterCallback<PointerMoveEvent>(OnPointerMovedEvent);
@@ -56,11 +60,17 @@ public class UIController : MonoBehaviour
         color7.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color7);
         color8.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color8);
         color9.RegisterCallback<ClickEvent, VisualElement>(OnColorSelectedEvent, color9);
+        nextPalette.RegisterCallback<ClickEvent>(OnNextPaletteClickedEvent);
     }
 
     private void OnColorSelectedEvent(ClickEvent _evt, VisualElement _button)
     {
         OnColorSelected.Invoke(_button);
+    }
+
+    private void OnNextPaletteClickedEvent(ClickEvent _evt)
+    {
+        OnNextPaletteClicked.Invoke(colorButtons);
     }
 
     private void Start()
