@@ -20,6 +20,7 @@ public class DrawingManager : MonoBehaviour
     private Color currentColor = Color.black;
     public PaletteList paletteList;
     private ColorPalette currentPalette;
+    private int paletteIndex = 0;
 
     //Connect events
     private void Start()
@@ -96,7 +97,12 @@ public class DrawingManager : MonoBehaviour
 
     private void SwapPalette(VisualElement[] _buttons)
     {
-        currentPalette = paletteList.palettes[1];
+        paletteIndex++;
+        if (paletteIndex >= paletteList.palettes.Length)
+        {
+            paletteIndex = 0;
+        }
+        currentPalette = paletteList.palettes[paletteIndex];
         UpdateColors(_buttons);
     }
 
@@ -104,7 +110,6 @@ public class DrawingManager : MonoBehaviour
     {
         for (int i = 0; i < _buttons.Length; i++)
         {
-            Debug.Log("Setting button " + _buttons[i] + " to colour: " + currentPalette.colors[i]);
             _buttons[i].style.backgroundColor = currentPalette.colors[i];
         }
     }

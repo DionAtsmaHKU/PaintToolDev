@@ -31,7 +31,6 @@ public class SaveLoad : MonoBehaviour
 
         string json = JsonUtility.ToJson(drawingRenderer.data);
         File.WriteAllText(directory + fileName, json);
-        Debug.Log("Woo yeah we savin");
     }
 
     public void Load()
@@ -44,9 +43,7 @@ public class SaveLoad : MonoBehaviour
             drawingRenderer.data = JsonUtility.FromJson<SaveData>(json);
             drawingRenderer.UpdateRenderTexture();
         }
-        else { Debug.Log("woops there's nothing there man"); }
-
-        Debug.Log("Wuh-oh we're loadin");
+        else { Debug.Log("Nothing to load"); }
     }
 
     public void ExportToPng()
@@ -59,6 +56,5 @@ public class SaveLoad : MonoBehaviour
 
         byte[] bytes = drawingRenderer.drawingTexture.EncodeToPNG();
         File.WriteAllBytes(directory + exportName, bytes);
-        Debug.Log("ex-ex-ex-exporting");
     }
 }

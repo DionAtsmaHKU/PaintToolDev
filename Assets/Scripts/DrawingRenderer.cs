@@ -55,7 +55,6 @@ public class DrawingRenderer : MonoBehaviour
             return;
 
         data.pixelColors[_pixelIndex] = _newColor;
-        Debug.Log("filled pixel: " + _pixelIndex);
         for (int i = 0; i < directions.Length; i++)
         {
             if (CheckFillWrap(_pixelIndex, directions[i]))
