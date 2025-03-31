@@ -1,0 +1,13 @@
+.unity-button:hover {
+    -unity-background-image-tint-color: rgb(213, 213, 213);
+}
+
+.unity-text-element {
+}
+
+.unity-button {
+}
+
+.unity-button:active {
+    -unity-background-image-tint-color: rgb(190, 190, 190);
+}

@@ -1,8 +1,8 @@
+using SFB;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Windows;
 
 public class SaveData
 {
@@ -27,22 +27,22 @@ public class SaveLoad : MonoBehaviour
     public void Save()
     {
         string directory = Application.persistentDataPath + path;
-        if (!System.IO.Directory.Exists(directory))
+        if (!Directory.Exists(directory))
         {
-            System.IO.Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(directory);
         }
 
         string json = JsonUtility.ToJson(drawingRenderer.data);
-        System.IO.File.WriteAllText(directory + fileName, json);
+        File.WriteAllText(directory + fileName, json);
     }
 
     public void Load()
     {
         string loadPath = Application.persistentDataPath + path + fileName; // Path.combine
 
-        if (System.IO.File.Exists(loadPath))
+        if (File.Exists(loadPath))
         {
-            string json = System.IO.File.ReadAllText(loadPath);
+            string json = File.ReadAllText(loadPath);
             drawingRenderer.data = JsonUtility.FromJson<SaveData>(json);
             drawingRenderer.UpdateRenderTexture();
         }
@@ -51,25 +51,12 @@ public class SaveLoad : MonoBehaviour
 
     public void ExportToPng()
     {
-        #if UNITY_EDITOR
-        var savePath = EditorUtility.SaveFilePanel(
+        var savePath = StandaloneFileBrowser.SaveFilePanel(
         "Save texture as PNG",
             "",
             "image.png",
             "png");
         byte[] bytes = drawingRenderer.drawingTexture.EncodeToPNG();
-        UnityEngine.Windows.File.WriteAllBytes(savePath, bytes);
-        return;
-        #endif
-        
-        string directory = Application.persistentDataPath + path;
-        if (!System.IO.Directory.Exists(directory))
-        {
-            System.IO.Directory.CreateDirectory(directory);
-        }
-        
-        byte[] texBytes = drawingRenderer.drawingTexture.EncodeToPNG();
-        // File.WriteAllBytes(directory + exportName, bytes);
-        System.IO.File.WriteAllBytes(directory, texBytes);
+        File.WriteAllBytes(savePath, bytes);
     }
 }
